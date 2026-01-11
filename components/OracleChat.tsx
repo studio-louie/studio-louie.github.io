@@ -8,6 +8,16 @@ interface OracleChatProps {
   onNavigate: (topic: string) => void;
 }
 
+const MOCK_RESPONSES = [
+  "The stars align in your favor, traveler.",
+  "It's dangerous to go alone! Take courage with you.",
+  "Time flows like a river... and history repeats.",
+  "Wisdom is not found in seeking answers, but in asking the right questions.",
+  "The Master Sword sleeps... but your destiny is awake.",
+  "A hero's strength comes not from their weapon, but from their heart.",
+  "(Demo Mode) The spirits are quiet today... Add a valid API Key to hear their true voice."
+];
+
 export const OracleChat: React.FC<OracleChatProps> = ({ onNavigate }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { 
@@ -61,15 +71,20 @@ export const OracleChat: React.FC<OracleChatProps> = ({ onNavigate }) => {
     setIsLoading(true);
 
     try {
-      // Check for API Key
       const apiKey = process.env.API_KEY;
-      if (!apiKey) {
-        throw new Error("API Key not found");
+
+      // DEMO MODE: If no API key is found, use a fake response instead of crashing
+      if (!apiKey || apiKey.trim() === '') {
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Fake delay
+        const randomResponse = MOCK_RESPONSES[Math.floor(Math.random() * MOCK_RESPONSES.length)];
+        setMessages(prev => [...prev, { role: 'model', content: randomResponse }]);
+        setIsLoading(false);
+        return;
       }
 
+      // REAL AI MODE
       const ai = new GoogleGenAI({ apiKey });
       
-      // Using gemini-3-flash-preview for quick text responses
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: [
@@ -81,11 +96,12 @@ export const OracleChat: React.FC<OracleChatProps> = ({ onNavigate }) => {
       });
 
       const responseText = response.text || "The spirits are silent... (No response)";
-      
       setMessages(prev => [...prev, { role: 'model', content: responseText }]);
+
     } catch (error) {
       console.error("Oracle error:", error);
-      setMessages(prev => [...prev, { role: 'model', content: "A dark fog clouds my vision. I cannot answer right now. (Check API Key)" }]);
+      // Fallback in case the API call itself fails
+      setMessages(prev => [...prev, { role: 'model', content: "The connection to the ethereal plane is weak... (Demo: Try again later)" }]);
     } finally {
       setIsLoading(false);
     }
