@@ -1,14 +1,77 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>My First Site</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Louie World</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              fantasy: ['"Cinzel Decorative"', 'cursive'],
+              body: ['Lato', 'sans-serif'],
+            },
+            colors: {
+              'hylian-gold': '#C8A947',
+              'hylian-blue': '#1F3A8B',
+              'forest-green': '#1A472A',
+              'dark-slate': '#1a1a1a',
+            },
+            animation: {
+              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'spark': 'spark 0.5s ease-out forwards',
+            },
+            keyframes: {
+              spark: {
+                '0%': { transform: 'scale(0)', opacity: '1' },
+                '100%': { transform: 'scale(1.5)', opacity: '0' },
+              }
+            }
+          },
+        },
+      }
+    </script>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f0f0f0; }
-        h1 { color: #333; }
+      body {
+        background-color: #050505;
+        color: #f0f0f0;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1a1a1a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #C8A947;
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #a68b36;
+      }
     </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.25.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
 </head>
-<body>
-    <h1>Hello World</h1>
-    <p>This is my first website hosted on GitHub Pages.</p>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
 </body>
 </html>
