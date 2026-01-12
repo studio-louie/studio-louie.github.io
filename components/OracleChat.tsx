@@ -52,10 +52,15 @@ export const OracleChat: React.FC<OracleChatProps> = ({ onNavigate }) => {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   };
 
   useEffect(() => {
@@ -114,7 +119,10 @@ export const OracleChat: React.FC<OracleChatProps> = ({ onNavigate }) => {
         <h3 className="font-fantasy text-hylian-gold text-xl tracking-wider">Consult the Oracle</h3>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div 
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto p-4 space-y-4"
+      >
         {messages.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[80%] p-3 rounded-lg ${
@@ -134,7 +142,6 @@ export const OracleChat: React.FC<OracleChatProps> = ({ onNavigate }) => {
              </div>
           </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       <div className="p-4 bg-black/40 border-t border-hylian-gold/20">
